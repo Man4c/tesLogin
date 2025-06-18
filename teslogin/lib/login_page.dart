@@ -13,6 +13,15 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _isSigningIn = false;
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   Future<void> _signInWithGoogle() async {
     setState(() {
@@ -33,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
         idToken: googleAuth.idToken,
       );
       await FirebaseAuth.instance.signInWithCredential(credential);
-      // Navigasi ke halaman utama setelah login
       if (mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomePage()),
@@ -42,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Login gagal: $e')));
+      ).showSnackBar(SnackBar(content: Text('Login gagal: $e')));
     } finally {
       setState(() {
         _isSigningIn = false;
@@ -53,55 +61,173 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Login',
-                style: TextStyle(
-                  fontSize: 32,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 40),
-              OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  side: BorderSide(color: Colors.white24),
-                  minimumSize: Size(double.infinity, 48),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
+      backgroundColor: const Color(0xFFEAF0FB),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Background dan tombol kembali
+            Stack(
+              children: [
+                Container(
+                  height: 200,
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF6D8CE2), Color(0xFFB8D1FF)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(40),
+                    ),
                   ),
                 ),
-                icon: Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/4/4a/Logo_2013_Google.png',
-                  height: 24,
+                SafeArea(
+                  child: IconButton(
+                    icon: const Icon(Icons.arrow_back, color: Colors.white),
+                    onPressed: () {},
+                  ),
                 ),
-                label: Text(
-                  _isSigningIn ? 'Signing in...' : 'Continue with Google',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                onPressed: _isSigningIn ? null : _signInWithGoogle,
-              ),
-              // Tambahkan tombol ke halaman register
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterPage(),
+              ],
+            ),
+
+            // Form
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Welcome Back',
+                    style: TextStyle(
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF3B4A72),
                     ),
-                  );
-                },
-                child: const Text('Belum punya akun? Daftar di sini'),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildTextField('Email', controller: _emailController),
+                  _buildTextField(
+                    'Password',
+                    isPassword: true,
+                    controller: _passwordController,
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed:
+                        _isSigningIn
+                            ? null
+                            : () {
+                              // TODO: Implement email/password login
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Email/Password login belum diimplementasi',
+                                  ),
+                                ),
+                              );
+                            },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromRGBO(58, 102, 199, 1),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child:
+                        _isSigningIn
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              'Sign in',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                              ),
+                            ),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text('Sign in with', textAlign: TextAlign.center),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildSocialIcon('assets/facebook.png', onTap: () {}),
+                      _buildSocialIcon('assets/twitter.png', onTap: () {}),
+                      _buildSocialIcon(
+                        'assets/google.png',
+                        onTap: _signInWithGoogle,
+                      ),
+                      _buildSocialIcon('assets/apple.png', onTap: () {}),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const RegisterPage(),
+                        ),
+                      );
+                    },
+                    child: const Text.rich(
+                      TextSpan(
+                        text: 'Don\'t have an account? ',
+                        children: [
+                          TextSpan(
+                            text: 'Sign up',
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    String label, {
+    bool isPassword = false,
+    TextEditingController? controller,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSocialIcon(String assetPath, {VoidCallback? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: CircleAvatar(
+          radius: 20,
+          backgroundColor: Colors.white,
+          child:
+              assetPath.contains('google')
+                  ? Image.asset('assets/google.png', height: 24)
+                  : Image.asset(assetPath, height: 24),
         ),
       ),
     );
