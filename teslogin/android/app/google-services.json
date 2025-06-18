@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1064548163853",
+    "project_id": "teslogin-caab5",
+    "storage_bucket": "teslogin-caab5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1064548163853:android:efcf4bbfedc47f2a879044",
+        "android_client_info": {
+          "package_name": "com.example.teslogin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1064548163853-m71q5ikbscavpughuo4n748p5ifej9ig.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.teslogin",
+            "certificate_hash": "a336fc36fc542fae0057870b080ca87b65554946"
+          }
+        },
+        {
+          "client_id": "1064548163853-lidiki47nof2orut7busq5ktsmhsjrpt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC63Fe2d1Zjfn5jk1WLROnzg_rPhRI_9rg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1064548163853-lidiki47nof2orut7busq5ktsmhsjrpt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
