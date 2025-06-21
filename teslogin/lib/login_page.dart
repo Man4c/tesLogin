@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -28,7 +29,18 @@ class _LoginPageState extends State<LoginPage> {
       _isSigningIn = true;
     });
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      GoogleSignIn googleSignIn;
+      if (kIsWeb) {
+        // TODO: Ganti dengan Web Client ID Anda dari Google Cloud Console.
+        // Buka https://console.cloud.google.com/apis/credentials
+        const String webClientId =
+            "1064548163853-lidiki47nof2orut7busq5ktsmhsjrpt.apps.googleusercontent.com";
+        googleSignIn = GoogleSignIn(clientId: webClientId);
+      } else {
+        googleSignIn = GoogleSignIn();
+      }
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
       if (googleUser == null) {
         setState(() {
           _isSigningIn = false;

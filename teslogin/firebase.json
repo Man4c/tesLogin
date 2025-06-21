@@ -1,0 +1,48 @@
+{
+    "firestore": {
+      "database": "(default)",
+      "location": "asia-southeast1",
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
+    },
+    "hosting": {
+      "public": "build/web",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    "database": {
+      "rules": "database.rules.json"
+    },
+    "flutter": {
+      "platforms": {
+        "android": {
+          "default": {
+            "projectId": "teslogin-caab5",
+            "appId": "1:1064548163853:android:efcf4bbfedc47f2a879044",
+            "fileOutput": "android/app/google-services.json"
+          }
+        },
+        "dart": {
+          "lib/firebase_options.dart": {
+            "projectId": "teslogin-caab5",
+            "configurations": {
+              "ios": "1:1064548163853:ios:712db450d3db073a879044",
+              "macos": "1:1064548163853:ios:712db450d3db073a879044",
+              "web": "1:1064548163853:web:e1414f6b40eaad42879044",
+              "windows": "1:1064548163853:web:e1414f6b40eaad42879044"
+            }
+          }
+        }
+      }
+    }
+  }
+  
